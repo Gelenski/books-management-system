@@ -1,26 +1,23 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Livro {
-    // * Atributos.
-    // Static significa que o atributo é da classe e não do objeto.
-    private static int contadorID = 1; // Gera os IDs automaticamente.
-    private Integer ID;
+    private static int contadorID = 1;
+    private int ID;
     private String titulo;
     private String autor;
-    private Integer anoPublicacao;
+    private int anoPublicacao;
     private String genero;
 
-    // * Constructor.
-    public Livro(String titulo, String autor, Integer anoPublicao, String genero) {
+    public Livro(String titulo, String autor, int anoPublicacao, String genero) {
         this.ID = contadorID++;
         this.titulo = titulo;
         this.autor = autor;
-        this.anoPublicacao = anoPublicao;
+        this.anoPublicacao = anoPublicacao;
         this.genero = genero;
     }
 
-    // * Getters 
-    public Integer getID() {
+    public int getID() {
         return this.ID;
     }
 
@@ -32,7 +29,7 @@ public class Livro {
         return this.autor;
     }
 
-    public Integer getAno() {
+    public int getAno() {
         return this.anoPublicacao;
     }
 
@@ -40,7 +37,6 @@ public class Livro {
         return this.genero;
     }
 
-    // * Setters
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
@@ -49,48 +45,93 @@ public class Livro {
         this.autor = autor;
     }
 
-    public void setAno(Integer anoPublicacao) {
+    public void setAno(int anoPublicacao) {
         this.anoPublicacao = anoPublicacao;
     }
-    
+
     public void setGenero(String genero) {
         this.genero = genero;
     }
 
-    // * Método para exibir informações dos livros instanciados.
     public void exibirInformacoes() {
         System.out.println("ID: " + this.ID);
         System.out.println("Título: " + this.titulo);
         System.out.println("Autor: " + this.autor);
-        System.out.println("Ano de publicação: " + this.anoPublicacao);
+        System.out.println("Ano de Publicação: " + this.anoPublicacao);
         System.out.println("Gênero: " + this.genero);
+        System.out.println();
     }
 
-    // * Método para buscar livros por título ou pelo autor.
     public static void buscarLivro(ArrayList<Livro> livros, String busca) {
-    for (Livro livro : livros) {
-        // Verifica se o livro não é nulo e se o título ou autor são iguais ao termo de busca.
-        if (livro != null && (livro.titulo.equalsIgnoreCase(busca) || livro.autor.equalsIgnoreCase(busca))) {
-            livro.exibirInformacoes();
-            return; // Para o loop após encontrar o livro.
-        } 
-    }
-    System.out.println("Livro não encontrado.");
-}
-
-    // * Método para alterar informações de um livro.
-    public static void alterarInfo() {
-         
+        boolean encontrado = false;
+        for (Livro livro : livros) {
+            if (livro != null && (livro.getTitulo().equalsIgnoreCase(busca) || livro.getAutor().equalsIgnoreCase(busca))) {
+                livro.exibirInformacoes();
+                encontrado = true;
+            }
+        }
+        if (!encontrado) {
+            System.out.println("Nenhum livro encontrado.");
+        }
     }
 
-    // * Método para deletar um livro.
-    public static void deletarLivro(ArrayList<Livro> livros, Integer ID) {
+    public static void alterarInfo(ArrayList<Livro> livros, int ID, int infoAlterar) {
+        Scanner scanner = new Scanner(System.in);
+        Livro livroAlterar = null;
+
+        for (Livro livro : livros) {
+            if (livro != null && livro.getID() == ID) {
+                livroAlterar = livro;
+                break;
+            }
+        }
+
+        if (livroAlterar == null) {
+            System.out.println("Livro com ID " + ID + " não encontrado.");
+            return;
+        }
+
+        switch (infoAlterar) {
+            case 1:
+                System.out.println("Digite o novo título do livro:");
+                String novoTitulo = scanner.next();
+                livroAlterar.setTitulo(novoTitulo);
+                break;
+
+            case 2:
+                System.out.println("Digite o novo autor do livro:");
+                String novoAutor = scanner.next();
+                livroAlterar.setAutor(novoAutor);
+                break;
+
+            case 3:
+                System.out.println("Digite o novo ano de publicação do livro:");
+                int novoAno = scanner.nextInt();
+                livroAlterar.setAno(novoAno);
+                break;
+
+            case 4:
+                System.out.println("Digite o novo gênero do livro:");
+                String novoGenero = scanner.next();
+                livroAlterar.setGenero(novoGenero);
+                break;
+
+            default:
+                System.out.println("Opção inválida para alteração.");
+                break;
+        }
+
+        System.out.println("Informação alterada com sucesso!");
+    }
+
+    public static void deletarLivro(ArrayList<Livro> livros, int ID) {
         for (int i = 0; i < livros.size(); i++) {
-            if (livros.get(i).ID.equals(ID)) {
+            if (livros.get(i).getID() == ID) {
                 livros.remove(i);
                 System.out.println("Livro deletado.");
                 return;
+            }
         }
+        System.out.println("Livro com ID " + ID + " não encontrado.");
     }
- }
 }
