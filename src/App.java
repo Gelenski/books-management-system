@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 public class App {
     public static void menu() {
+        clear();
         System.out.println("Bem-vindo ao sistema de biblioteca!");
         System.out.println("Selecione uma opção:");
         System.out.println("1 - Adicionar livro");
@@ -9,6 +10,18 @@ public class App {
         System.out.println("3 - Buscar livro");
         System.out.println("4 - Remover livro");
         System.out.println("5 - Sair");
+    }
+
+    // * Método que limpa a tela.  
+    public static void clear() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
+    public static void continuar() {
+        System.out.println("Pressione qualquer botão para continuar:");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
     }
 
     public static void main(String[] args) throws Exception {
@@ -27,14 +40,16 @@ public class App {
         //// Livro[] livros = {livro1, livro2, livro3, livro4};
         
         // * Loop para manter o programa em execução.
+        Scanner scanner = new Scanner(System.in);
+
         while (true) {
             menu();
-            Scanner scanner = new Scanner(System.in);
             Integer opcao = scanner.nextInt();
 
             // * Verifica a opção escolhida.
             switch (opcao) {
                 case 1: 
+                    clear();
                     System.out.println("Digite o título do livro:");
                     String titulo = scanner.next();
                     System.out.println("Digite o autor do livro:");
@@ -48,29 +63,35 @@ public class App {
                 break;
 
                 case 2:
+                clear();
                     for (Livro livro : livros) {
                         if (livro != null) {
                             livro.exibirInformacoes();
                         }
                     }
+                    continuar();
                 break;
 
                 case 3:
+                clear();
                     System.out.println("Digite o título ou autor do livro:");
                     String busca = scanner.next();
                     Livro.buscarLivro(livros, busca);
+                    continuar();
                 break;
 
                 case 4:
+                clear();
                     System.out.println("Digite o ID do livro:");
                     Integer ID = scanner.nextInt();
                     Livro.deletarLivro(livros, ID);
+                    continuar();
                 break;
 
                 case 5:
+                    scanner.close();
                     System.out.println("Saindo...");
                     System.exit(0);
-                    scanner.close();
                 break;
 
                 default:
