@@ -10,6 +10,7 @@ public class App {
         System.out.println("4 - Remover livro");
         System.out.println("5 - Sair");
     }
+
     public static void main(String[] args) throws Exception {
         Livro livro1 = new Livro("O Senhor dos Anéis", "J.R.R. Tolkien", 1954, "Fantasia");
         Livro livro2 = new Livro("Harry Potter", "J.K. Rowling", 1997, "Fantasia");

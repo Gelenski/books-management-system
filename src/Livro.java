@@ -19,16 +19,43 @@ public class Livro {
         this.genero = genero;
     }
 
-    //// Método para adicionar um livro. (Deprecated)
-    // !--------------------------------------- Método não funcionando, necessário corrigir -----------------.
-    // public static void adicionarLivro(Livro[] livros, Livro novoLivro) {
-    //     for (int i = 0; i < livros.length; i++) {
-    //         if (livros[i] == null) {
-    //             livros[i] = novoLivro;
-    //             break; 
-    //         }
-    //     }
-    // }
+    // * Getters 
+    public Integer getID() {
+        return this.ID;
+    }
+
+    public String getTitulo() {
+        return this.titulo;
+    }
+
+    public String getAutor() {
+        return this.autor;
+    }
+
+    public Integer getAno() {
+        return this.anoPublicacao;
+    }
+
+    public String getGenero() {
+        return this.genero;
+    }
+
+    // * Setters
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
+    public void setAno(Integer anoPublicacao) {
+        this.anoPublicacao = anoPublicacao;
+    }
+    
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
 
     // * Método para exibir informações dos livros instanciados.
     public void exibirInformacoes() {
@@ -50,6 +77,11 @@ public class Livro {
     }
     System.out.println("Livro não encontrado.");
 }
+
+    // * Método para alterar informações de um livro.
+    public static void alterarInfo() {
+         
+    }
 
     // * Método para deletar um livro.
     public static void deletarLivro(ArrayList<Livro> livros, Integer ID) {
