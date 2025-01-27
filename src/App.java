@@ -1,29 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 public class App {
-    public static void menu() {
-        clear();
-        System.out.println("Bem-vindo ao sistema de biblioteca!");
-        System.out.println("Selecione uma opção:");
-        System.out.println("1 - Adicionar livro");
-        System.out.println("2 - Listar livro");
-        System.out.println("3 - Buscar livro");
-        System.out.println("4 - Remover livro");
-        System.out.println("5 - Sair");
-    }
-
-    // * Método que limpa a tela.  
-    public static void clear() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
-    public static void continuar() {
-        System.out.println("Pressione qualquer botão para continuar:");
-        Scanner scanner = new Scanner(System.in);
-        scanner.nextLine();
-    }
-
     public static void main(String[] args) throws Exception {
         Livro livro1 = new Livro("O Senhor dos Anéis", "J.R.R. Tolkien", 1954, "Fantasia");
         Livro livro2 = new Livro("Harry Potter", "J.K. Rowling", 1997, "Fantasia");
@@ -31,7 +8,6 @@ public class App {
         Livro livro4 = new Livro("A Game of Thrones", "George R.R. Martin", 1996, "Fantasia");
 
         ArrayList<Livro> livros = new ArrayList<Livro>();
-
         livros.add(livro1);
         livros.add(livro2);
         livros.add(livro3);
@@ -44,8 +20,8 @@ public class App {
 
         while (true) {
             menu();
-            Integer opcao = scanner.nextInt();
-
+            int opcao = scanner.nextInt();
+            scanner.nextLine(); 
             // * Verifica a opção escolhida.
             switch (opcao) {
                 case 1: 
@@ -55,7 +31,8 @@ public class App {
                     System.out.println("Digite o autor do livro:");
                     String autor = scanner.next();
                     System.out.println("Digite o ano de publicação do livro:");
-                    Integer anoPublicacao = scanner.nextInt();
+                    int anoPublicacao = scanner.nextInt();
+                    scanner.nextLine();
                     System.out.println("Digite o gênero do livro:");
                     String genero = scanner.next();
                     Livro novoLivro = new Livro(titulo, autor, anoPublicacao, genero);
@@ -99,5 +76,33 @@ public class App {
                 break;
             }
         }
+    }
+
+    // * Menu da aplicação. 
+     public static void menu() {
+        clear();
+        System.out.println("Bem-vindo ao sistema de biblioteca!");
+        System.out.println("Selecione uma opção:");
+        System.out.println("1 - Adicionar livro");
+        System.out.println("2 - Listar livro");
+        System.out.println("3 - Buscar livro");
+        System.out.println("4 - Remover livro");
+        System.out.println("5 - Sair");
+    }
+
+    // * Método que retorna ao menu principal.
+    public static void continuar() {
+        System.out.println("Pressione Enter para continuar...");
+        try {
+            System.in.read();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    // * Método que limpa a tela.  
+    public static void clear() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }

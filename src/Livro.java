@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 public class Livro {
     // * Atributos.
     // Static significa que o atributo é da classe e não do objeto.
@@ -79,9 +78,7 @@ public class Livro {
 }
 
     // * Método para alterar informações de um livro.
-    public static void alterarInfo() {
-         
-    }
+    public static void alterarInfo() {}
 
     // * Método para deletar um livro.
     public static void deletarLivro(ArrayList<Livro> livros, Integer ID) {
