@@ -1,4 +1,4 @@
-//scanner
+import java.util.ArrayList;
 import java.util.Scanner;
 public class App {
     public static void menu() {
@@ -16,7 +16,14 @@ public class App {
         Livro livro3 = new Livro("O Hobbit", "J.R.R. Tolkien", 1937, "Fantasia");
         Livro livro4 = new Livro("A Game of Thrones", "George R.R. Martin", 1996, "Fantasia");
 
-        Livro[] livros = {livro1, livro2, livro3, livro4};
+        ArrayList<Livro> livros = new ArrayList<Livro>();
+
+        livros.add(livro1);
+        livros.add(livro2);
+        livros.add(livro3);
+        livros.add(livro4);
+
+        //// Livro[] livros = {livro1, livro2, livro3, livro4};
         
         // * Loop para manter o programa em execução.
         while (true) {
@@ -36,13 +43,13 @@ public class App {
                     System.out.println("Digite o gênero do livro:");
                     String genero = scanner.next();
                     Livro novoLivro = new Livro(titulo, autor, anoPublicacao, genero);
-                    Livro.adicionarLivro(livros, novoLivro);
+                    livros.add(novoLivro);
                 break;
 
                 case 2:
-                    for (int i = 0; i < livros.length; i++) {
-                        if (livros[i] != null) {
-                            livros[i].exibirInformacoes();
+                    for (Livro livro : livros) {
+                        if (livro != null) {
+                            livro.exibirInformacoes();
                         }
                     }
                 break;
