@@ -63,17 +63,15 @@ public class Livro {
     }
 
     public static void buscarLivro(ArrayList<Livro> livros, String busca) {
-        boolean encontrado = false;
-        for (Livro livro : livros) {
-            if (livro != null && (livro.getTitulo().equalsIgnoreCase(busca) || livro.getAutor().equalsIgnoreCase(busca))) {
-                livro.exibirInformacoes();
-                encontrado = true;
-            }
-        }
-        if (!encontrado) {
-            System.out.println("Nenhum livro encontrado.");
-        }
+    for (Livro livro : livros) {
+        // Verifica se o livro não é nulo e se o título ou autor são iguais ao termo de busca.
+        if (livro != null && (livro.titulo.equalsIgnoreCase(busca) || livro.autor.equalsIgnoreCase(busca))) {
+            livro.exibirInformacoes();
+            return; // Para o loop após encontrar o livro.
+        } 
     }
+    System.out.println("Livro não encontrado.");
+}
 
     public static void alterarInfo(ArrayList<Livro> livros, int ID, int infoAlterar) {
         Scanner scanner = new Scanner(System.in);

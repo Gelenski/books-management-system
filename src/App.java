@@ -19,7 +19,7 @@ public class App {
         Livro livro3 = new Livro("O Hobbit", "J.R.R. Tolkien", 1937, "Fantasia");
         Livro livro4 = new Livro("A Game of Thrones", "George R.R. Martin", 1996, "Fantasia");
 
-        ArrayList<Livro> livros = new ArrayList<>();
+        ArrayList<Livro> livros = new ArrayList<Livro>();
         livros.add(livro1);
         livros.add(livro2);
         livros.add(livro3);
@@ -58,12 +58,14 @@ public class App {
                     break;
 
                 case 3:
+                clear();
                     System.out.println("Digite o título ou autor do livro:");
                     String busca = scanner.next();
                     Livro.buscarLivro(livros, busca);
                     break;
 
                 case 4:
+                clear();
                     System.out.println("Digite o ID do livro:");
                     int ID = scanner.nextInt();
                     Livro.deletarLivro(livros, ID);
@@ -87,5 +89,33 @@ public class App {
                     break;
             }
         }
+    }
+
+    // * Menu da aplicação. 
+     public static void menu() {
+        clear();
+        System.out.println("Bem-vindo ao sistema de biblioteca!");
+        System.out.println("Selecione uma opção:");
+        System.out.println("1 - Adicionar livro");
+        System.out.println("2 - Listar livro");
+        System.out.println("3 - Buscar livro");
+        System.out.println("4 - Remover livro");
+        System.out.println("5 - Sair");
+    }
+
+    // * Método que retorna ao menu principal.
+    public static void continuar() {
+        System.out.println("Pressione Enter para continuar...");
+        try {
+            System.in.read();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    // * Método que limpa a tela.  
+    public static void clear() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
