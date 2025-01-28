@@ -74,6 +74,7 @@ public class Livro {
 }
 
     public static void alterarInfo(ArrayList<Livro> livros, int ID, int infoAlterar) {
+        @SuppressWarnings("resource") // ! ---------- Método scanner se torna impossível de ser fechado. ----------
         Scanner scanner = new Scanner(System.in);
         Livro livroAlterar = null;
 
@@ -118,7 +119,6 @@ public class Livro {
                 System.out.println("Opção inválida para alteração.");
                 break;
         }
-
         System.out.println("Informação alterada com sucesso!");
     }
 
