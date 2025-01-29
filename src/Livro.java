@@ -65,7 +65,7 @@ public class Livro {
     public static void buscarLivro(ArrayList<Livro> livros, String busca) {
     for (Livro livro : livros) {
         // Verifica se o livro não é nulo e se o título ou autor são iguais ao termo de busca.
-        if (livro != null && (livro.titulo.equalsIgnoreCase(busca) || livro.autor.equalsIgnoreCase(busca))) {
+        if (livro != null && (livro.getTitulo().equalsIgnoreCase(busca) || livro.getAutor().equalsIgnoreCase(busca))) {
             livro.exibirInformacoes();
             return; // Para o loop após encontrar o livro.
         } 
