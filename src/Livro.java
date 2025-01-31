@@ -1,8 +1,11 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Livro {
-    private static int contadorID = 1;
+    // private static int contadorID = 1;
     private int ID;
     private String titulo;
     private String autor;
@@ -10,11 +13,23 @@ public class Livro {
     private String genero;
 
     public Livro(String titulo, String autor, int anoPublicacao, String genero) {
-        this.ID = contadorID++;
         this.titulo = titulo;
         this.autor = autor;
         this.anoPublicacao = anoPublicacao;
         this.genero = genero;
+
+        // * Statement para inserção.
+        String sql = "INSERT INTO livros (titulo, autor, ano, genero) VALUES (?,?,?,?)";
+        try(Connection conexao = DatabaseConnection.conectar()) {
+          PreparedStatement stmt = conexao.prepareStatement(sql);
+          stmt.setString(1, titulo);
+          stmt.setString(2, autor);
+          stmt.setInt(3, anoPublicacao);
+          stmt.setString(4, genero);
+          stmt.executeUpdate();
+        } catch(SQLException e) {
+            System.out.println("Erro ao inserir livro: " + e.getMessage());
+        }
     }
 
     public int getID() {
