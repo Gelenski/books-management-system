@@ -36,6 +36,8 @@ public class App {
         while (true) {
             exibirMenu();
             System.out.print("Escolha uma opção: ");
+
+            // ! Corrigir com try catch.
             int opcao = scanner.nextInt();
 
             switch (opcao) {
@@ -93,6 +95,7 @@ public class App {
 
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
+                    continuar();
                     break;
             }
         }
