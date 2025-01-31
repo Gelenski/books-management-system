@@ -54,11 +54,11 @@ public class Livro {
     }
 
     public void exibirInformacoes() {
-        System.out.println("ID: " + this.ID);
-        System.out.println("Título: " + this.titulo);
-        System.out.println("Autor: " + this.autor);
-        System.out.println("Ano de Publicação: " + this.anoPublicacao);
-        System.out.println("Gênero: " + this.genero);
+        System.out.println("ID: " + getID());
+        System.out.println("Título: " + getTitulo());
+        System.out.println("Autor: " + getAutor());
+        System.out.println("Ano de Publicação: " + getAno());
+        System.out.println("Gênero: " + getGenero());
         System.out.println();
     }
 
