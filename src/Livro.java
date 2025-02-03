@@ -92,19 +92,19 @@ public class Livro {
         @SuppressWarnings("resource") // ! ---------- Método scanner se torna impossível de ser fechado. ----------
         Scanner scanner = new Scanner(System.in);
         Livro livroAlterar = null;
-
+        
         for (Livro livro : livros) {
             if (livro != null && livro.getID() == ID) {
                 livroAlterar = livro;
                 break;
             }
         }
-
+        
         if (livroAlterar == null) {
             System.out.println("Livro com ID " + ID + " não encontrado.");
             return;
         }
-
+        
         switch (infoAlterar) {
             case 1:
                 System.out.println("Digite o novo título do livro:");
@@ -138,6 +138,7 @@ public class Livro {
     }
 
     public static void deletarLivro(ArrayList<Livro> livros, int ID) {
+        App.clear();
         for (int i = 0; i < livros.size(); i++) {
             if (livros.get(i).getID() == ID) {
                 livros.remove(i);

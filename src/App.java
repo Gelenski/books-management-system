@@ -15,6 +15,12 @@ public class App {
         System.out.println("6 - Sair");
     }
 
+    // * Método que limpa a tela.  
+    public static void clear() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
     public static void main(String[] args) {
         
         // * Criação da tabela livros.
@@ -129,11 +135,5 @@ public class App {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    
-    // * Método que limpa a tela.  
-    public static void clear() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 }
