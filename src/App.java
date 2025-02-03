@@ -1,8 +1,10 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class App {
     public static void exibirMenu() {
+        clear();
         System.out.println("Bem-vindo ao sistema de biblioteca!");
         System.out.println("Selecione uma opção:");
         System.out.println("1 - Adicionar livro");
@@ -36,9 +38,15 @@ public class App {
         while (true) {
             exibirMenu();
             System.out.print("Escolha uma opção: ");
-
-            // ! Corrigir com try catch.
-            int opcao = scanner.nextInt();
+            int opcao;
+            try {
+            opcao = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Por favor insira uma opção válida.");
+                scanner.next();
+                continuar();
+                continue;
+            }
 
             switch (opcao) {
                 case 1:
