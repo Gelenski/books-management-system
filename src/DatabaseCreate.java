@@ -9,7 +9,7 @@ public class DatabaseCreate {
         "titulo VARCHAR(80) NOT NULL," + 
         "autor VARCHAR(60) NOT NULL," + 
         "ano INTEGER NOT NULL," + 
-        "genero VARCHAR(40))";
+        "genero VARCHAR(40) NOT NULL)";
         
         try (Connection conexao = DatabaseConnection.conectar()) {
             Statement stmt = conexao.createStatement();

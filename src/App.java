@@ -15,6 +15,12 @@ public class App {
         System.out.println("6 - Sair");
     }
 
+    // * Método que limpa a tela.  
+    public static void clear() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
     public static void main(String[] args) {
         
         // * Criação da tabela livros.
@@ -50,12 +56,21 @@ public class App {
 
             switch (opcao) {
                 case 1:
+                    clear();
                     System.out.println("Digite o título do livro:");
                     String titulo = scanner.next();
                     System.out.println("Digite o autor do livro:");
                     String autor = scanner.next();
                     System.out.println("Digite o ano de publicação do livro:");
-                    int anoPublicacao = scanner.nextInt();
+                    int anoPublicacao;
+                    try {
+                    anoPublicacao = scanner.nextInt();
+                    } catch (InputMismatchException e) {
+                        System.out.println("Por favor insira uma ano válido.");
+                        scanner.next();
+                        continuar();
+                        continue;
+                    }
                     System.out.println("Digite o gênero do livro:");
                     String genero = scanner.next();
                     Livro novoLivro = new Livro(titulo, autor, anoPublicacao, genero);
@@ -64,6 +79,7 @@ public class App {
                     break;
 
                 case 2:
+                    clear();
                     if (livros.isEmpty()) {
                         System.out.println("Nenhum livro cadastrado.");
                     } else {
@@ -89,6 +105,7 @@ public class App {
                     break;
 
                 case 5:
+                    clear();
                     System.out.println("Digite o ID do livro:");
                     int IDAlterar = scanner.nextInt();
                     System.out.println("Que informação deseja alterar? Título (1), Autor (2), Ano de Publicação (3), Gênero (4):");
@@ -97,11 +114,13 @@ public class App {
                     break;
 
                 case 6:
+                    clear();    
                     System.out.println("Saindo...");
                     scanner.close();
                     System.exit(0);
 
                 default:
+                    clear();
                     System.out.println("Opção inválida. Tente novamente.");
                     continuar();
                     break;
@@ -129,11 +148,5 @@ public class App {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    
-    // * Método que limpa a tela.  
-    public static void clear() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 }
