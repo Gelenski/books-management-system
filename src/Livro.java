@@ -1,11 +1,12 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.Statement;
 import java.util.Scanner;
 
 public class Livro {
-    // private static int contadorID = 1;
     private int ID;
     private String titulo;
     private String autor;
@@ -20,20 +21,26 @@ public class Livro {
 
         // * Statement para inserção.
         String sql = "INSERT INTO livros (titulo, autor, ano, genero) VALUES (?,?,?,?)";
-        try(Connection conexao = DatabaseConnection.conectar()) {
-          PreparedStatement stmt = conexao.prepareStatement(sql);
-          stmt.setString(1, titulo);
-          stmt.setString(2, autor);
-          stmt.setInt(3, anoPublicacao);
-          stmt.setString(4, genero);
-          stmt.executeUpdate();
-        } catch(SQLException e) {
-            System.out.println("Erro ao inserir livro: " + e.getMessage());
+        try (Connection conexao = DatabaseConnection.conectar()) {
+            PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, titulo);
+            stmt.setString(2, autor);
+            stmt.setInt(3, anoPublicacao);
+            stmt.setString(4, genero);
+            stmt.executeUpdate();
+
+            // Obter o ID gerado automaticamente.
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                this.ID = generatedKeys.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     public int getID() {
-        return this.ID;
+        return ID;
     }
 
     public String getTitulo() {
@@ -69,7 +76,7 @@ public class Livro {
     }
 
     public void exibirInformacoes() {
-        System.out.println("ID: " + this.ID);
+        System.out.println("ID: " + this.getID());
         System.out.println("Título: " + this.titulo);
         System.out.println("Autor: " + this.autor);
         System.out.println("Ano de Publicação: " + this.anoPublicacao);

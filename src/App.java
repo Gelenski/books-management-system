@@ -26,18 +26,7 @@ public class App {
         // * Criação da tabela livros.
         DatabaseCreate.criarTabela();
 
-        Livro livro1 = new Livro("O Senhor dos Anéis", "J.R.R. Tolkien", 1954, "Fantasia");
-        Livro livro2 = new Livro("Harry Potter", "J.K. Rowling", 1997, "Fantasia");
-        Livro livro3 = new Livro("O Hobbit", "J.R.R. Tolkien", 1937, "Fantasia");
-        Livro livro4 = new Livro("A Game of Thrones", "George R.R. Martin", 1996, "Fantasia");
-        Livro livro5 = new Livro("Ética à Nicômaco", "Aristóteles", 274, "Filosofia");
-
         ArrayList<Livro> livros = new ArrayList<Livro>();
-        livros.add(livro1);
-        livros.add(livro2);
-        livros.add(livro3);
-        livros.add(livro4);
-        livros.add(livro5);
 
         Scanner scanner = new Scanner(System.in);
 
