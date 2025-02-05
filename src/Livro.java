@@ -137,14 +137,27 @@ public class Livro {
         System.out.println("Informação alterada com sucesso!");
     }
 
-    public static void deletarLivro(ArrayList<Livro> livros, int ID) {
-        for (int i = 0; i < livros.size(); i++) {
-            if (livros.get(i).getID() == ID) {
-                livros.remove(i);
-                System.out.println("Livro deletado.");
-                return;
-            }
+public static void deletarLivro(ArrayList<Livro> livros, int ID) {
+    String sql = "DELETE FROM livros WHERE id = ?";
+
+    try (Connection conexao = DatabaseConnection.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+        stmt.setInt(1, ID);
+        int linhasAfetadas = stmt.executeUpdate();
+
+        if (linhasAfetadas > 0) {
+            System.out.println("Livro deletado com sucesso!");
+
+            // Agora que deletamos do banco, removemos da lista
+            livros.removeIf(livro -> livro.getID() == ID);
+        } else {
+            System.out.println("Livro com ID " + ID + " não encontrado no banco de dados.");
         }
-        System.out.println("Livro com ID " + ID + " não encontrado.");
+
+    } catch (SQLException e) {
+        System.out.println("Erro ao deletar livro: " + e.getMessage());
     }
+}
+
 }
