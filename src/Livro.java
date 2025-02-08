@@ -2,169 +2,219 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.sql.Statement;
-import java.util.Scanner;
-
 public class Livro {
-    private int ID;
+    private int id;
     private String titulo;
     private String autor;
     private int anoPublicacao;
     private String genero;
 
+    // Construtor
     public Livro(String titulo, String autor, int anoPublicacao, String genero) {
         this.titulo = titulo;
         this.autor = autor;
         this.anoPublicacao = anoPublicacao;
         this.genero = genero;
-
-        // * Statement para inserção.
-        String sql = "INSERT INTO livros (titulo, autor, ano, genero) VALUES (?,?,?,?)";
-        try (Connection conexao = DatabaseConnection.conectar()) {
-            PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, titulo);
-            stmt.setString(2, autor);
-            stmt.setInt(3, anoPublicacao);
-            stmt.setString(4, genero);
-            stmt.executeUpdate();
-
-            // Obter o ID gerado automaticamente.
-            ResultSet generatedKeys = stmt.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                this.ID = generatedKeys.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
-    public int getID() {
-        return ID;
-    }
-
-    public String getTitulo() {
-        return this.titulo;
-    }
-
-    public String getAutor() {
-        return this.autor;
-    }
-
-    public int getAno() {
-        return this.anoPublicacao;
-    }
-
-    public String getGenero() {
-        return this.genero;
-    }
-
-    public void setTitulo(String titulo) {
+    // Construtor para quando o livro já está no banco de dados (com ID)
+    public Livro(int id, String titulo, String autor, int anoPublicacao, String genero) {
+        this.id = id;
         this.titulo = titulo;
-    }
-
-    public void setAutor(String autor) {
         this.autor = autor;
-    }
-
-    public void setAno(int anoPublicacao) {
         this.anoPublicacao = anoPublicacao;
-    }
-
-    public void setGenero(String genero) {
         this.genero = genero;
     }
 
+    // Método para salvar o livro no banco de dados
+    public void salvar() {
+        // Obtém a conexão com o banco de dados
+        Connection conexao = DatabaseConnection.conectar();
+        if (conexao != null) {
+            String sql = "INSERT INTO livros (titulo, autor, ano, genero) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+                stmt.setString(1, this.titulo);
+                stmt.setString(2, this.autor);
+                stmt.setInt(3, this.anoPublicacao);
+                stmt.setString(4, this.genero);
+                stmt.executeUpdate();  // Executa o comando de inserção
+                System.out.println("Livro salvo com sucesso!");
+            } catch (SQLException e) {
+                System.out.println("Erro ao salvar o livro no banco de dados: " + e.getMessage());
+            } finally {
+                try {
+                    conexao.close();  // Fecha a conexão após a operação
+                } catch (SQLException e) {
+                    System.out.println("Erro ao fechar a conexão: " + e.getMessage());
+                }
+            }
+        } else {
+            System.out.println("Erro na conexão com o banco de dados.");
+        }
+    }
+
+    // Método para exibir as informações do livro
     public void exibirInformacoes() {
-        System.out.println("ID: " + this.getID());
+        System.out.println("ID: " + this.id);
         System.out.println("Título: " + this.titulo);
         System.out.println("Autor: " + this.autor);
         System.out.println("Ano de Publicação: " + this.anoPublicacao);
         System.out.println("Gênero: " + this.genero);
-        System.out.println();
     }
 
-    public static void buscarLivro(ArrayList<Livro> livros, String busca) {
-    for (Livro livro : livros) {
-        // Verifica se o livro não é nulo e se o título ou autor são iguais ao termo de busca.
-        if (livro != null && (livro.getTitulo().equalsIgnoreCase(busca) || livro.getAutor().equalsIgnoreCase(busca))) {
-            livro.exibirInformacoes();
-            return; // Para o loop após encontrar o livro.
-        } 
-    }
-    System.out.println("Livro não encontrado.");
-}
-
-    public static void alterarInfo(ArrayList<Livro> livros, int ID, int infoAlterar) {
-        @SuppressWarnings("resource") // ! ---------- Método scanner se torna impossível de ser fechado. ----------
-        Scanner scanner = new Scanner(System.in);
-        Livro livroAlterar = null;
-        
-        for (Livro livro : livros) {
-            if (livro != null && livro.getID() == ID) {
-                livroAlterar = livro;
-                break;
+    // Método para listar todos os livros
+    public static void listarLivros() {
+        Connection conexao = DatabaseConnection.conectar();
+        if (conexao != null) {
+            String sql = "SELECT * FROM livros";
+            try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    do {
+                        Livro livro = new Livro(
+                                rs.getInt("id"),
+                                rs.getString("titulo"),
+                                rs.getString("autor"),
+                                rs.getInt("ano"),
+                                rs.getString("genero")
+                        );
+                        livro.exibirInformacoes();
+                    } while (rs.next());
+                } else {
+                    System.out.println("Nenhum livro cadastrado.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Erro ao listar os livros: " + e.getMessage());
+            } finally {
+                try {
+                    conexao.close();
+                } catch (SQLException e) {
+                    System.out.println("Erro ao fechar a conexão: " + e.getMessage());
+                }
             }
-        }
-        
-        if (livroAlterar == null) {
-            System.out.println("Livro com ID " + ID + " não encontrado.");
-            return;
-        }
-        
-        switch (infoAlterar) {
-            case 1:
-                System.out.println("Digite o novo título do livro:");
-                String novoTitulo = scanner.next();
-                livroAlterar.setTitulo(novoTitulo);
-                break;
-
-            case 2:
-                System.out.println("Digite o novo autor do livro:");
-                String novoAutor = scanner.next();
-                livroAlterar.setAutor(novoAutor);
-                break;
-
-            case 3:
-                System.out.println("Digite o novo ano de publicação do livro:");
-                int novoAno = scanner.nextInt();
-                livroAlterar.setAno(novoAno);
-                break;
-
-            case 4:
-                System.out.println("Digite o novo gênero do livro:");
-                String novoGenero = scanner.next();
-                livroAlterar.setGenero(novoGenero);
-                break;
-
-            default:
-                System.out.println("Opção inválida para alteração.");
-                break;
-        }
-        System.out.println("Informação alterada com sucesso!");
-    }
-
-public static void deletarLivro(ArrayList<Livro> livros, int ID) {
-    String sql = "DELETE FROM livros WHERE id = ?";
-
-    try (Connection conexao = DatabaseConnection.conectar();
-         PreparedStatement stmt = conexao.prepareStatement(sql)) {
-
-        stmt.setInt(1, ID);
-        int linhasAfetadas = stmt.executeUpdate();
-
-        if (linhasAfetadas > 0) {
-            System.out.println("Livro deletado com sucesso!");
-
-            // Agora que deletamos do banco, removemos da lista
-            livros.removeIf(livro -> livro.getID() == ID);
         } else {
-            System.out.println("Livro com ID " + ID + " não encontrado no banco de dados.");
+            System.out.println("Erro na conexão com o banco de dados.");
         }
-
-    } catch (SQLException e) {
-        System.out.println("Erro ao deletar livro: " + e.getMessage());
     }
-}
 
+    // Método para buscar um livro pelo título ou autor
+    public static void buscarLivro(String busca) {
+        Connection conexao = DatabaseConnection.conectar();
+        if (conexao != null) {
+            String sql = "SELECT * FROM livros WHERE titulo LIKE ? OR autor LIKE ?";
+            try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+                stmt.setString(1, "%" + busca + "%");
+                stmt.setString(2, "%" + busca + "%");
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    Livro livro = new Livro(
+                            rs.getInt("id"),
+                            rs.getString("titulo"),
+                            rs.getString("autor"),
+                            rs.getInt("ano"),
+                            rs.getString("genero")
+                    );
+                    livro.exibirInformacoes();
+                } else {
+                    System.out.println("Livro não encontrado.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Erro ao buscar o livro: " + e.getMessage());
+            } finally {
+                try {
+                    conexao.close();
+                } catch (SQLException e) {
+                    System.out.println("Erro ao fechar a conexão: " + e.getMessage());
+                }
+            }
+        } else {
+            System.out.println("Erro na conexão com o banco de dados.");
+        }
+    }
+
+    // Método para deletar um livro do banco de dados
+    public static void deletarLivro(int id) {
+        Connection conexao = DatabaseConnection.conectar();
+        if (conexao != null) {
+            String sql = "DELETE FROM livros WHERE id = ?";
+            try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+                stmt.setInt(1, id);
+                int linhasAfetadas = stmt.executeUpdate();
+                if (linhasAfetadas > 0) {
+                    System.out.println("Livro deletado com sucesso!");
+                } else {
+                    System.out.println("Livro não encontrado.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Erro ao deletar o livro: " + e.getMessage());
+            } finally {
+                try {
+                    conexao.close();
+                } catch (SQLException e) {
+                    System.out.println("Erro ao fechar a conexão: " + e.getMessage());
+                }
+            }
+        } else {
+            System.out.println("Erro na conexão com o banco de dados.");
+        }
+    }
+
+    // Método para alterar informações de um livro no banco de dados
+    public static void alterarInfo(int id, int infoAlterar, String novoValor) {
+        Connection conexao = DatabaseConnection.conectar();
+        if (conexao != null) {
+            String sql = "";
+            switch (infoAlterar) {
+                case 1:
+                    sql = "UPDATE livros SET titulo = ? WHERE id = ?";
+                    break;
+                case 2:
+                    sql = "UPDATE livros SET autor = ? WHERE id = ?";
+                    break;
+                case 3:
+                    sql = "UPDATE livros SET ano = ? WHERE id = ?";
+                    break;
+                case 4:
+                    sql = "UPDATE livros SET genero = ? WHERE id = ?";
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+                    return;
+            }
+
+            try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+                if (infoAlterar == 3) {
+                    stmt.setInt(1, Integer.parseInt(novoValor));
+                } else {
+                    stmt.setString(1, novoValor);
+                }
+                stmt.setInt(2, id);
+                int linhasAfetadas = stmt.executeUpdate();
+                if (linhasAfetadas > 0) {
+                    System.out.println("Informação alterada com sucesso!");
+                } else {
+                    System.out.println("Livro não encontrado.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Erro ao alterar a informação do livro: " + e.getMessage());
+            } finally {
+                try {
+                    conexao.close();
+                } catch (SQLException e) {
+                    System.out.println("Erro ao fechar a conexão: " + e.getMessage());
+                }
+            }
+        } else {
+            System.out.println("Erro na conexão com o banco de dados.");
+        }
+    }
+
+    // Getter e Setter para o ID
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
